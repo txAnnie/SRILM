@@ -1,0 +1,7 @@
+ubuntu环境下
+1.SRILM下载：（1.7.1版本）
+http://www.speech.sri.com/projects/srilm/download.html
+2.安装SRILM之前需要先安装TCL：（8.5.19）
+http://www.tcl.tk/software/tcltk/download.html
+
+进入unix目录下：
