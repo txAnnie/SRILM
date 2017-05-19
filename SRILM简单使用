@@ -1,5 +1,10 @@
+
+
+
+cd srilm
+
 1、从语料库中生成n-gram计数文件：
-ngram-count -text train.txt -order 3 -write train.txt.count
+./bin/i686-m64/ngram-count -text train.txt -order 3 -write train.txt.count
 
 -text指向输入文件
 
@@ -10,7 +15,7 @@ ngram-count -text train.txt -order 3 -write train.txt.count
 
 
 2、从上一步生成的计数文件中训练语言模型：
-ngram-count -read train.txt.count -order 3 -lm train.lm -interpolate -kndiscount
+./bin/i686-m64/ngram-count -read train.txt.count -order 3 -lm train.lm -interpolate -kndiscount
 
 -read指向输入文件，为上一步的输出文件
 
@@ -23,7 +28,7 @@ ngram-count -read train.txt.count -order 3 -lm train.lm -interpolate -kndiscount
 
 
 3、利用上一步生成的语言模型计算测试集的困惑度：
-ngram -ppl test.txt -order 3 -lm LM >　result
+./bin/i686-m64/ngram -ppl test.txt -order 3 -lm LM >　result
 
 -ppl为对测试集句子进行评分(logP(T)，其中P(T)为所有句子的概率乘积）和计算测试集困惑度的参数
 
