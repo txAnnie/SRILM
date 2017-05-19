@@ -4,4 +4,127 @@ http://www.speech.sri.com/projects/srilm/download.html
 2.安装SRILM之前需要先安装TCL：（8.5.19）
 http://www.tcl.tk/software/tcltk/download.html
 
-进入unix目录下：
+cd unix
+./configure --prefix=/home/xtan/experiment/MOSES/tcll       #没有root权限，自己指定安装路径
+make
+make install
+
+3.安装SRILM
+
+修改Makefile文件（srilm目录下）
+
+找到此行： # SRILM = /home/speech/stolcke/project/srilm/devel，另起一行输入srilm的安装路径，SRILM = /home/xtan/experiment/MOSES/srilm
+
+找到此行：MACHINE_TYPE := $(shell $(SRILM)/sbin/machine-type)，在其前加＃注释掉，并另起一行输入：MACHINE_TYPE := i686-m64。使用uname -i 可以查看此行告诉Makefile之后要看的设置在/home/user/srilm/common /Makefile.machine.i686-m64中。
+把Ubuntu系统的相关设定告诉Makefile，即用编辑器修改 /home/research/ghshan/test/moses/tools/srilm/common目录下的文件：Makefile.machine.i686-gcc4
+
+找到：
+GCC_FLAGS = -mtune=althon64 -Wall -Wno-unused-variable -Wno-uninitialized（cpu型号）
+
+CC = $(GCC_PATH)gcc $(GCC_FLAGS) -Wimplicit-int
+
+CXX = $(GCC_PATH)g++ $(GCC_FLAGS) -DINSTANTIATE_TEMPLATES
+
+这里是为了告诉SRILM系统使用的compiler(c和c++)，符合安装情况，不需要修改。
+
+athlon64 -m64代表机器cpu的相关参数，注意根据情况修改，64说的是64bit机器；
+
+找到：
+# Tcl support (standard in Linux)
+
+TCL_INCLUDE =
+
+TCL_LIBRARY =
+
+修改为 # Tcl support (standard in Linux)
+
+TCL_INCLUDE =  -I/usr/include/tcl8.5
+
+TCL_LIBRARY =  -L/usr/lib/tcl8.5
+
+NO_TCL = X
+
+4.编译SRILM:
+
+切换到/srilm/，执行
+
+make World
+
+5.测试：
+
+export 　PATH=/home/xtan/experiment/MOSES/srilm/bin/i686-m64:
+/home/xtan/experiment/MOSES/srilm/bin:$PATH
+
+make test
+
+出现如下信息：
+
+ 
+
+        .........
+
+ 
+
+ 
+
+       *** Running test ngram-prune ***
+
+11.17user 2.35system 0:14.20elapsed 95%CPU (0avgtext+0avgdata 0maxresident)k
+
+0inputs+15816outputs (0major+31653minor)pagefaults 0swaps
+
+ngram-prune: stdout output IDENTICAL.
+
+ngram-prune: stderr output IDENTICAL.
+
+ 
+
+*** Running test ngram-server ***
+
+0.21user 0.72system 0:06.56elapsed 14%CPU (0avgtext+0avgdata 0maxresident)k
+
+0inputs+8outputs (0major+2559minor)pagefaults 0swaps
+
+ngram-server: stdout output IDENTICAL.
+
+ngram-server: stderr output IDENTICAL.
+
+ 
+
+*** Running test ppl-counts ***
+
+0.10user 0.24system 0:00.32elapsed 104%CPU (0avgtext+0avgdata 0maxresident)k
+
+0inputs+16outputs (0major+4724minor)pagefaults 0swaps
+
+ppl-counts: stdout output IDENTICAL.
+
+ppl-counts: stderr output IDENTICAL.
+
+ 
+
+*** Running test tagged-ngram ***
+
+0.00user 0.05system 0:00.11elapsed 51%CPU (0avgtext+0avgdata 0maxresident)k
+
+0inputs+24outputs (0major+1789minor)pagefaults 0swaps
+
+tagged-ngram: stdout output IDENTICAL.
+
+tagged-ngram: stderr output IDENTICAL.
+
+ 
+
+*** Running test vocab-aliases ***
+
+0.27user 0.24system 0:01.65elapsed 31%CPU (0avgtext+0avgdata 0maxresident)k
+
+0inputs+16outputs (0major+5845minor)pagefaults 0swaps
+
+vocab-aliases: stdout output IDENTICAL.
+
+vocab-aliases: stderr output IDENTICAL.
+
+需要等待一段时间，如果出现多是IDENTICAL,很少的DIFFERS，就证明srilm编译成功了！
+
+
