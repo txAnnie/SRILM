@@ -1,0 +1,36 @@
+1、从语料库中生成n-gram计数文件：
+ngram-count -text train.txt -order 3 -write train.txt.count
+
+-text指向输入文件
+
+-order指向生成几元的n-gram,即n
+
+-write指向输出文件
+
+
+
+2、从上一步生成的计数文件中训练语言模型：
+ngram-count -read train.txt.count -order 3 -lm train.lm -interpolate -kndiscount
+
+-read指向输入文件，为上一步的输出文件
+
+-order与上同
+
+-lm指向训练好的语言模型输出文件
+
+最后两个参数为所采用的平滑方法，-interpolate为插值平滑，-kndiscount为 modified　Kneser-Ney 打折法，这两个是联合使用的
+
+
+
+3、利用上一步生成的语言模型计算测试集的困惑度：
+ngram -ppl test.txt -order 3 -lm LM >　result
+
+-ppl为对测试集句子进行评分(logP(T)，其中P(T)为所有句子的概率乘积）和计算测试集困惑度的参数
+
+result为输出结果文件
+
+其他参数同上。
+
+如果想要每条句子单独打分，则使用以下命令：
+
+ngram -ppl test.txt -order 3 -lm LM -debug 1 >　result
